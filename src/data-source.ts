@@ -22,9 +22,12 @@ const PostgresDataSource = new DataSource({
     ]
   },
   logging: true,
-  entities: [dir + 'src/entities/*.ts'],
-  migrations: [dir + '/migrations/*.ts'],
-  migrationsRun: true
+  entities: [dir + '/entities/**/*{.js,.ts}'],
+  migrations: [dir + '/migrations/**/*{.js,.ts}'],
+  migrationsRun: true,
+  synchronize:true
 })
+console.log(process.env.POSTGRES_HOST)
+console.log(dir + '/entities/**/*{.js,.ts}')
 
 export { PostgresDataSource }
