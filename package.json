@@ -1,5 +1,5 @@
 {
-  "name": "chula-med-engine",
+  "name": "test-backend-docker",
   "version": "1.0.0",
   "description": "",
   "main": "dist/server.js",
@@ -65,14 +65,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/faithinyous/property-rent-roject_backend.git"
+    "url": "git+https://github.com/faithinyous/test-backend-docker.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://https://github.com/faithinyous/property-rent-roject_backend/issues"
+    "url": "https://https://github.com/faithinyous/test-backend-docker/issues"
   },
-  "homepage": "https://github.com/faithinyous/property-rent-roject_backend#readme",
+  "homepage": "https://github.com/faithinyous/test-backend-docker#readme",
   "lint-staged": {
     "{**/*,*}.{js,ts,jsx,tsx,css,md}": "prettier --write",
     ".js,.ts .": "eslint --fix --ext",
