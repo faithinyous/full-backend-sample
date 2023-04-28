@@ -38,7 +38,7 @@ class App {
   public initialize() {
     return new Promise(async (resolve, reject) => {
       try {
-        // await App.connectToDatabase()
+        await App.connectToDatabase()
         // await App.initializeSession(this.app)
         this.initializeMiddleware()
         this.initializeRouter()
