@@ -18,6 +18,9 @@ services:
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_DATABASE: ${POSTGRES_DATABASE}
       PORT: ${PORT}
+    networks:
+      - test-network
+
 
   postgres:
     image: postgis/postgis:15-3.3-alpine
@@ -30,3 +33,8 @@ services:
       - ./data/pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - test-network
+networks:
+  test-network:
+    driver: bridge

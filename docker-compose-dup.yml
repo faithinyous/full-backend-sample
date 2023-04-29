@@ -1,0 +1,24 @@
+version: '1'
+
+services:
+  backend2:
+    container_name: 'test-backend2'
+    build:
+      context: .
+    ports:
+      - "5002:5001"
+    volumes:
+      - ./src:/src
+    environment:
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      PORT: ${PORT}
+    networks:
+      - test-backend-docker_test-network
+
+networks:
+  test-backend-docker_test-network:
+    external: true
