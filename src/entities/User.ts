@@ -1,6 +1,8 @@
-import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from 'typeorm'
+import {BaseEntity, Column, Entity, Index, OneToMany, PrimaryGeneratedColumn} from 'typeorm'
+import {Book} from ".";
 
 @Entity()
+@Index(['firstname','lastname'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -15,5 +17,9 @@ export class User extends BaseEntity {
     nullable: true
   })
   lastname: string | null
+
+  @OneToMany(() => Book, book => book.user)
+  book:Book[]
+
 
 }

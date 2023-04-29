@@ -1,3 +1,5 @@
+import * as process from "process";
+
 require('dotenv').config()
 import { DataSource } from 'typeorm'
 const dir = __dirname
@@ -28,14 +30,13 @@ const PostgresDataSource = new DataSource({
   cache: {
     type: "ioredis",
     duration: 30000,
-    options: {
-      startupNodes: [
-        {
-          host: 'redis',
-          port: 6379,
-        }
-      ],
       options: {
+          startupNodes: [
+            {
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT,
+          }
+        ],
         scaleReads: 'all',
         redisOptions: {
           maxRetriesPerRequest: 1
@@ -43,7 +44,6 @@ const PostgresDataSource = new DataSource({
         ignoreErrors: true
       }
     }
-  }
 })
 
 export { PostgresDataSource }
