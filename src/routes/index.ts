@@ -11,4 +11,5 @@ router.get('/version', (req, res) => {
 })
 
 router.get('/users', UserController.userList)
+router.get('/user/:id', UserController.getUserBuId)
 export default router

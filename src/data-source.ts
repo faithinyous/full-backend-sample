@@ -22,12 +22,28 @@ const PostgresDataSource = new DataSource({
     ]
   },
   logging: true,
-  entities: [dir + '/entities/**/*{.js,.ts}'],
+  entities: [dir +'/entities/**/*{.js,.ts}'],
   migrations: [dir + '/migrations/**/*{.js,.ts}'],
   migrationsRun: true,
-  synchronize:true
+  cache: {
+    type: "ioredis",
+    duration: 30000,
+    options: {
+      startupNodes: [
+        {
+          host: 'redis',
+          port: 6379,
+        }
+      ],
+      options: {
+        scaleReads: 'all',
+        redisOptions: {
+          maxRetriesPerRequest: 1
+        },
+        ignoreErrors: true
+      }
+    }
+  }
 })
-console.log(process.env.POSTGRES_HOST)
-console.log(dir + '/entities/**/*{.js,.ts}')
 
 export { PostgresDataSource }

@@ -2,13 +2,14 @@ version: '1'
 
 services:
   backend:
-    container_name: 'test-backend'
+    container_name: test-backend
     build:
       context: .
     ports:
       - "5001:5001"
     depends_on:
       - postgres
+      - redis
     volumes:
       - ./src:/src
     environment:
@@ -33,6 +34,16 @@ services:
       - ./data/pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - test-network
+
+
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./data/redis:/data
     networks:
       - test-network
 networks:
