@@ -29,7 +29,7 @@ VALUES ('8eeb9ea3-cdf8-4b22-b991-56343a721bcf', 3, 'e4ad8a4b-3d7a-4156-ac15-75f8
 ## Test
 
 ```bash
-curl http://localhost:5001/users
+curl http://localhost:5001/user
 curl http://localhost:5001/user/{id}
 ```
 
