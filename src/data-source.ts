@@ -29,7 +29,7 @@ const PostgresDataSource = new DataSource({
   migrationsRun: true,
   cache: {
     type: 'ioredis',
-    duration: 30000,
+    duration: 300000,
     options: {
       host: process.env.REDIS_HOST,
       port: process.env.REDIS_PORT,

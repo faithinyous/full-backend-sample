@@ -23,7 +23,7 @@ export default class UserController {
   ): Promise<void> {
     try {
       const user = await User.createQueryBuilder()
-        .cache('users_admins', 500000)
+        .cache(true)
         .where('id = :id', { id: req.params.id })
         .getOne()
       console.log(user)
