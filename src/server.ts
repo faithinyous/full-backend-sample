@@ -1,13 +1,21 @@
-import App from './app'
+import App from './app2'
 import Logger from '@/utils/logger'
 // import validateEnv from './utils/validateEnv'
 // validateEnv() //==> Validate the .env.template variables below
-const app = new App(parseInt(process.env.PORT) || 5000)
-app
+const server = new App(parseInt(process.env.PORT) || 5000)
+// app
+//   .initialize()
+//   .then(() => {
+//     app.listen()
+//   })
+//   .catch((err) => {
+//     Logger.error('Failed to start server', err)
+//   })
+server
   .initialize()
-  .then(() => {
-    app.listen()
+  .then(async () => {
+    await server.listen()
   })
   .catch((err) => {
-    Logger.error('Failed to start server', err)
+    server.app.log.error('Failed to start server', err)
   })
