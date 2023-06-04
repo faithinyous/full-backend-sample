@@ -33,7 +33,6 @@
     "morgan": "^1.10.0",
     "morgan-body": "^2.6.9",
     "pg": "^8.11.0",
-    "redis": "^4.6.7",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.3.16",
     "typeorm-extension": "^2.8.1",

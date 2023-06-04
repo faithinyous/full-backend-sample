@@ -62,12 +62,5 @@ const PostgresDataSource = new DataSource({
   //   }
   // }
 })
-console.log({
-  host: process.env.POSTGRES_HOST_REPLICA1,
-  port: parseInt(process.env.POSTGRES_PORT_REPLICA1),
-  username: process.env.POSTGRES_USERNAME,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DATABASE
-})
 
 export { PostgresDataSource }
