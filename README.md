@@ -3,6 +3,11 @@
 ## Usage
 
 ```bash
+#for local dev - dont forget to fix .env
+docker compose up pg_master pg_slave redis -d
+yarn dev
+
+#for docker - dont forget to fix .env
 docker-compose build
 docker-compose up -d
 ```
