@@ -22,3 +22,6 @@ services:
 networks:
   test-backend-docker_test-network:
     external: true
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16

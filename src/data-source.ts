@@ -1,4 +1,4 @@
-import * as process from "process";
+import * as process from 'process'
 
 require('dotenv').config()
 import { DataSource } from 'typeorm'
@@ -15,7 +15,7 @@ const PostgresDataSource = new DataSource({
     },
     slaves: [
       {
-        host: process.env.POSTGRES_HOST,
+        host: process.env.POSTGRES_HOST_REPLICA1,
         port: parseInt(process.env.POSTGRES_PORT),
         username: process.env.POSTGRES_USERNAME,
         password: process.env.POSTGRES_PASSWORD,
@@ -24,26 +24,50 @@ const PostgresDataSource = new DataSource({
     ]
   },
   logging: true,
-  entities: [dir +'/entities/**/*{.js,.ts}'],
+  entities: [dir + '/entities/**/*{.js,.ts}'],
   migrations: [dir + '/migrations/**/*{.js,.ts}'],
   migrationsRun: true,
   cache: {
-    type: "ioredis",
+    type: 'ioredis',
     duration: 30000,
-      options: {
-          startupNodes: [
-            {
-        host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT,
-          }
-        ],
-        scaleReads: 'all',
-        redisOptions: {
-          maxRetriesPerRequest: 1
-        },
-        ignoreErrors: true
-      }
+    options: {
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
+
+      scaleReads: 'all',
+      redisOptions: {
+        maxRetriesPerRequest: 1
+      },
+      ignoreErrors: true
     }
+  }
+  /****
+   * Redis cluster setup
+   */
+  // cache: {
+  //   type: 'ioredis/cluster',
+  //   duration: 30000,
+  //   options: {
+  //     startupNodes: [
+  //       {
+  //         host: process.env.REDIS_HOST,
+  //         port: process.env.REDIS_PORT
+  //       }
+  //     ],
+  //     scaleReads: 'all',
+  //     redisOptions: {
+  //       maxRetriesPerRequest: 1
+  //     },
+  //     ignoreErrors: true
+  //   }
+  // }
+})
+console.log({
+  host: process.env.POSTGRES_HOST_REPLICA1,
+  port: parseInt(process.env.POSTGRES_PORT_REPLICA1),
+  username: process.env.POSTGRES_USERNAME,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DATABASE
 })
 
 export { PostgresDataSource }

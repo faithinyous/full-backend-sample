@@ -1,22 +1,80 @@
 version: '1'
 
 services:
+  redis:
+    image: redis:latest
+    container_name: redis_test
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./data/redis:/data
+    networks:
+      - my-network
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-
-
-  postgres:
-    image: postgis/postgis:15-3.3-alpine
-    container_name: postgres_test
+#  postgres:
+#    image: postgis/postgis:15-3.3-alpine
+#    container_name: postgres_test
+#    environment:
+#      POSTGRES_USER: ${POSTGRES_USERNAME}
+#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#      POSTGRES_DB: ${POSTGRES_DATABASE}
+#    volumes:
+#      - ./data/pgdata:/var/lib/postgresql/data
+#    ports:
+#      - "5432:5432"
+#    networks:
+#      - my-network
+  pg_master:
+    container_name: pg_master
+    build: ./postgres/master
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DATABASE}
-    volumes:
-      - ./data/pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      PG_REP_USER: ${POSTGRES_REPLICA_USER}
+      PG_REP_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
-      - test-network
+      - my-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pg_slave:
+    container_name: pg_slave
+    ports:
+      - "5433:5432"
+    links:
+      - pg_master
+    depends_on:
+      pg_master:
+        condition: service_healthy
+    build: ./postgres/slave
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      PG_REP_USER: ${POSTGRES_REPLICA_USER}
+      PG_REP_PASSWORD: ${POSTGRES_PASSWORD}
+      PG_MASTER_HOST: pg_master
+      PG_MASTER_PORT: ${POSTGRES_PORT}
+    networks:
+      - my-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
     container_name: test-backend
@@ -24,9 +82,14 @@ services:
       context: .
     ports:
       - "5001:5001"
-    depends_on:
-      - postgres
+    links:
       - redis
+      - pg_slave
+    depends_on:
+      pg_slave:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - ./src:/src
     environment:
@@ -37,17 +100,11 @@ services:
       POSTGRES_DATABASE: ${POSTGRES_DATABASE}
       PORT: ${PORT}
     networks:
-      - test-network
+      - my-network
 
-  redis:
-    image: redis:latest
-    container_name: redis_test
-    ports:
-      - '6379:6379'
-    volumes:
-      - ./data/redis:/data
-    networks:
-      - test-network
 networks:
-  test-network:
+  my-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16

@@ -1,0 +1,29 @@
+version: "3"
+services:
+  pg_master:
+    build: ./master
+    volumes:
+      - ./data/pgdata:/var/lib/postgresql/data
+    environment:
+        POSTGRES_USER: ${POSTGRES_USERNAME}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_DB: ${POSTGRES_DATABASE}
+        PG_REP_USER: ${POSTGRES_USERNAME}
+        PG_REP_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      default:
+        aliases:
+          - pg_cluster
+  pg_slave:
+    build: ./slave
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      PG_REP_USER: ${POSTGRES_USERNAME}
+      PG_REP_PASSWORD: ${POSTGRES_PASSWORD}
+      PG_MASTER_HOST: pg_master
+    networks:
+      default:
+        aliases:
+          - pg_cluster
