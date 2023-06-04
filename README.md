@@ -33,5 +33,10 @@ curl http://localhost:5001/users
 curl http://localhost:5001/user/{id}
 ```
 
+## Performance test
+
+![withoutcache.png](images%2Fwithoutcache.png)[No Cache](/images/withoutcache.png)
+
+![withcache.png](images%2Fwithcache.png)[with Cache](/images/with.png![withcache.png](images%2Fwithcache.png))
 
 
